@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Drum Machine</title>
+</head>
+
+<body>
+	<h2 class="title">Drum Machine</h2>
+	<div class="panel" id="drum-machine">
+		<div id="instruction">Press a key or click a button</div>
+		<div id="buttons">
+			<button class="drum-pad" data-key="Q" id="heater-1">
+				<audio class="clip" id="Q" src="https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3" type="audio/mpeg"></audio>Q</button>
+			<button class="drum-pad" data-key="W" id="heater-2">
+				<audio class="clip" id="W" src="https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3" type="audio/mpeg"></audio>W</button>
+			<button class="drum-pad" data-key="E" id="heater-3">
+				<audio class="clip" id="E" src="https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3" type="audio/mpeg"></audio>E</button>
+			<br></br>
+			<button class="drum-pad" data-key="A" id="heater-4">
+				<audio class="clip" id="A" src="https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3" type="audio/mpeg"></audio>A</button>
+			<button class="drum-pad" data-key="S" id="clap">
+				<audio class="clip" id="S" src="https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3" type="audio/mpeg"></audio>S</button>
+			<button class="drum-pad" data-key="D" id="open-hh">
+				<audio class="clip" id="D" src="https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3" type="audio/mpeg"></audio>D</button>
+			<br></br>
+			<button class="drum-pad" data-key="Z" id="kick-n-hat">
+				<audio class="clip" id="Z" src="https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3" type="audio/mpeg"></audio>Z</button>
+			<button class="drum-pad" data-key="X" id="kick">
+				<audio class="clip" id="X" src="https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3" type="audio/mpeg"></audio>X</button>
+			<button class="drum-pad" data-key="C" id="closed-hh">
+				<audio class="clip" id="C" src="https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3" type="audio/mpeg"></audio>C</button>
+		</div>
+	</div>
+
+	<div id="display"></div>
+
+<style type="text/css">
+	html {
+		background-color: #ffd5cc;
+
+	}
+	.title {
+		font-family: system-ui;
+		margin: 0 auto;
+		text-align: center;
+		padding-top: 10px;
+	}
+
+	#instruction {
+		font-family: system-ui;
+		margin: 0 auto;
+		text-align: center;
+		padding-top: 10px;
+	}
+
+	#display {
+		font-family: system-ui;
+		font-size: 20px;
+		margin: 0 auto;
+		text-align: center;
+		padding-top: 380px;
+	}
+
+	#buttons {
+		position: absolute;
+		top: 35%;
+		left: 50%;
+    transform: translate(-50%, -50%);
+	}
+
+	button {
+		width: 90px;
+		height: 90px;
+		font-family: system-ui;
+		font-size: 20px;
+		background-color: #ffc2e2;
+		transition: background-color 0.2s;
+		border-radius: 10px;
+	}
+
+	.clicked {
+		background-color: hotpink;
+	}
+
+</style>
+
+<script type="text/javascript">
+	const keyToAudio = {
+		Q: 'Q',
+		W: 'W',
+		E: 'E',
+		A: 'A',
+		S: 'S',
+		D: 'D',
+		Z: 'Z',
+		X: 'X',
+		C: 'C'
+	};
+
+	const descriptions = {
+    Q: 'Heater-1',
+    W: 'Heater-2',
+    E: 'Heater-3',
+    A: 'Heater-4',
+    S: 'Clap',
+    D: 'Open HH',
+    Z: 'Kick-n-Hat',
+    X: 'Kick',
+    C: 'Closed HH'
+  }
+ const buttons = document.querySelectorAll('.drum-pad');
+
+    buttons.forEach(button => {
+    	button.addEventListener('click', () => {
+    		const key = button.getAttribute('data-key');
+    		if (keyToAudio[key]) {
+    			const description = descriptions[key];
+    			updateDisplay(description);
+    			playAudio(keyToAudio[key]);
+    			button.classList.add('clicked');
+    			setTimeout(() => {
+    				button.classList.remove('clicked');
+    			}, 200);
+    		}
+    	});
+    });
+
+    document.addEventListener('keydown', (event) => {
+    	const key = event.key.toUpperCase();
+    	const button = document.querySelector(`[data-key="${key}"]`);
+    	if (button && keyToAudio[key]) {
+    		const description = descriptions[key];
+    		updateDisplay(description);
+    		playAudio(keyToAudio[key]);
+    		button.classList.add('clicked');
+    		setTimeout(() => {
+    			button.classList.remove('clicked');
+    		}, 200);
+    	}
+    });
+
+    function playAudio(audioId) {
+        const audio = document.getElementById(audioId);
+        audio.currentTime = 0;
+        audio.play();
+    }
+
+    function updateDisplay(description) {
+        const display = document.getElementById('display');
+        display.innerText = `Sound: ${description}`;
+        setTimeout(() => {
+            display.innerText = '';
+        }, 2000);
+    }
+</script>
+</body>
+</html>
